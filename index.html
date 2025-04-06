@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spooky Magic Story</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Georgia, serif;
+      background-color: #1c1c1c;
+      color: #f2f2f2;
+      overflow: hidden;
+    }
+    .page {
+      display: none;
+      height: 100vh;
+      width: 100vw;
+      padding: 4rem;
+      padding-bottom: 6rem;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+    .page.active {
+      display: block;
+    }
+    .controls {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    button {
+      background-color: #444;
+      color: #fff;
+      border: none;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      margin: 0 0.5rem;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #666;
+    }
+    h1 {
+      text-align: center;
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>The Grimoire of Shadows</h1>
+  <div id="story"></div>
+  <div class="controls">
+    <button onclick="prevPage()">Previous</button>
+    <button onclick="nextPage()">Next</button>
+    <span id="pageIndicator"></span>
+  </div>
+  <script>
+    const storyPages = [];
+
+    function generateParagraph(pageNum) {
+      const sentence = `In the forgotten village of Ashvale, where shadows danced beneath ancient trees and the air carried the scent of forgotten spells, a chilling mystery began to unravel under the watchful gaze of a blood-red moon.`;
+      const wordCount = sentence.split(' ').length;
+      const repetitions = Math.ceil(200 / wordCount);
+      const fullParagraph = Array(repetitions).fill(sentence).join(' ');
+      return `
+        <div class="page" id="page-${pageNum}">
+          <h2>Chapter ${pageNum}</h2>
+          <p>${fullParagraph}</p>
+        </div>
+      `;
+    }
+
+    for (let i = 1; i <= 100; i++) {
+      storyPages.push(generateParagraph(i));
+    }
+
+    document.getElementById("story").innerHTML = storyPages.join("");
+
+    let currentPage = 1;
+    function showPage(page) {
+      document.querySelectorAll(".page").forEach(p => p.classList.remove("active"));
+      document.getElementById(`page-${page}`).classList.add("active");
+      document.getElementById("pageIndicator").textContent = `Page ${page} of 100`;
+    }
+
+    function nextPage() {
+      if (currentPage < 100) {
+        currentPage++;
+        showPage(currentPage);
+      }
+    }
+
+    function prevPage() {
+      if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+      }
+    }
+
+    showPage(currentPage);
+  </script>
+</body>
+</html>
